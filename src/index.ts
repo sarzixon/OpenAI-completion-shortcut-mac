@@ -23,10 +23,18 @@ async function prompt(clip: string) {
         max_tokens: 2000
     } as CreateCompletionRequest;
 
-    const completion = await openai.createCompletion(completionRequest)
+    try {
+        // "Please generate a joke about entrepreneurs"
+        const completion = await openai.createCompletion(completionRequest)
+        clipboard.writeSync(completion.data.choices[0].text || '')
+    } catch (e) {
+        if (e instanceof Error) {
+            console.log(e.message)
+            clipboard.writeSync(e.message)
+        }
 
-    clipboard.writeSync(completion.data.choices[0].text || '')
-    // "Please generate a joke about entrepreneurs"
+    }
+
 }
 
 
